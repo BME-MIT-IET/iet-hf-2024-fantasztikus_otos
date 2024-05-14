@@ -29,7 +29,7 @@ public class oszetett_egy {
         f.Step(true, "");
         f.GetTeams(0).GetPlayer(0).PumpMove(f.PumpSearch(2));
         f.GetTeams(1).GetPlayer(0).PipeMove(f.PipeSearch(3));
-        f.GetTeams(1).GetPlayer(0).RepairPipe();
+        f.GetTeams(1).GetPlayer(0).Repair();
         f.Step(true, "");
 
 
