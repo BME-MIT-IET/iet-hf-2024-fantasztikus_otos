@@ -24,7 +24,7 @@ public class Field
 	private int sNum = 0;
 	private int currentRound = 0;
 	public Boolean loadSuccess = true; //Betöltéshez kell
-
+	private Random random = new Random();
 //Actions
 
 	/**
@@ -79,7 +79,6 @@ public class Field
 	 */
 	public void NextTurn() {
 		for(int i = 0; i < 5; i++) {
-			Random r = new Random();
 			BreakPump(true);
 			turns++;
 			//Ha elérünk egy bizonyos körszámot, játék vége
@@ -91,8 +90,7 @@ public class Field
 	 * @param randomIn
 	 */
 	public void BreakPump(boolean randomIn) {
-		Random r = new Random();
-		int selectedPump = r.nextInt(pumps.size());
+		int selectedPump = random.nextInt(pumps.size());
 		if(!pumps.get(selectedPump).ruined && !pumps.get(selectedPump).GetIsSource()){
 			pumps.get(selectedPump).Ruin(pumps.get(selectedPump));
 			System.out.println("Pump " + pumps.get(selectedPump).GetId() + " pumpa elromlott");
@@ -113,11 +111,7 @@ public class Field
 			cistern.SetPumpSpawned(true);
 		}
 		Pipe pi = cistern.CreateNewPipe();
-		/*
-		Random random = new Random();
-		int randomNumber = random.nextInt(800);
-		pi.GetPU().SetPos(randomNumber,700);
-		 */
+
 		BreakPump(true);
 		teams.get(0).Turn(this, b, s);
 		teams.get(1).Turn(this, b, s);
@@ -410,7 +404,6 @@ public class Field
 							for(Pipe pi : pipes) {
 
 								if(pi.GetId() == pipeId) {
-									//System.out.printf("\n"+pi.GetId() + pipeId);
 									for(Pump p : pumps) {
 										if(p.GetId() == pump1) {
 											pi.AddPump(p);
@@ -421,7 +414,6 @@ public class Field
 											pi.AddPump(p);
 											pi.SetAttached(p,true);
 										}
-										//if(p.GetId() == attachedItem) pi.SetAttached(p, attachedBoolean);
 									}
 								}
 							}
@@ -484,8 +476,7 @@ public class Field
 			int numOfSource = 0;                                    //Megszámoljuk hány forrás van
 			for(Pump p : pumps) if(p.GetIsSource()) numOfSource++;    //Megszámoljuk a forrásokat
 
-			Random rnd = new Random();
-			int sourceIndex = rnd.nextInt(0, numOfSource);    //Random érték 0 és forrásszám között
+			int sourceIndex = random.nextInt(0, numOfSource);    //Random érték 0 és forrásszám között
 
 			int index = 0;                                            //Hanyadik forrásnál járunk
 			for(Pump p : pumps)                                        //Minden pumpán végigmegyünk
