@@ -16,7 +16,6 @@ public class Field
 	private int sabPoints;
 	private int mecPoints;
 	private int turns;
-	private boolean pumpspawned;
 	List<Pump> pumps = new ArrayList<>();
 	List<Pipe> pipes = new ArrayList<>();
 	List<Team> teams = new ArrayList<>();
@@ -42,7 +41,7 @@ public class Field
 	 */
 	public void WaterLost(int amount) {
 		sabPoints += amount;
-		System.out.println("A szabotőrök pontjai " + sabPoints + " ponttal növekedett.");
+		System.out.printf("A szabotőrök pontjai %d ponttal növekedett.%n", sabPoints);
 	}
 
 	/**
@@ -71,7 +70,7 @@ public class Field
 	 */
 	public void WaterArrived(int amount) {
 		mecPoints += amount;
-		System.out.println("A szerelők pontjai " + mecPoints + " ponttal növekedett.");
+		System.out.printf("A szerelők pontjai %d ponttal növekedett.%n", mecPoints);
 	}
 
 	/**
@@ -93,7 +92,7 @@ public class Field
 		int selectedPump = random.nextInt(pumps.size());
 		if(!pumps.get(selectedPump).ruined && !pumps.get(selectedPump).GetIsSource()){
 			pumps.get(selectedPump).Ruin(pumps.get(selectedPump));
-			System.out.println("Pump " + pumps.get(selectedPump).GetId() + " pumpa elromlott");
+			System.out.printf("Pump %d pumpa elromlott%n", pumps.get(selectedPump).GetId());
 			ImageIcon icon = new ImageIcon("bin/Skins/BrokenPump.png");
 			pumps.get(selectedPump).pu.GetButton().setIcon(icon);
 		}
@@ -158,17 +157,17 @@ public class Field
 	{
 		if(mecPoints > sabPoints)
 		{
-			System.out.println("Nyert : Mechanic csapat (" + mecPoints + " pont)");
+			System.out.printf("Nyert : Mechanic csapat (%d pont)%n", mecPoints);
 			return 1;
 		}
 		else if(mecPoints == sabPoints)
 		{
-			System.out.println("Döntetlen ("+ mecPoints+" pont)");
+			System.out.printf("Döntetlen (%d pont)%n", mecPoints);
 			return -1;
 		}
 		else
 		{
-			System.out.println("Nyert : Szabotőr csapat ("+ sabPoints+" pont)");
+			System.out.printf("Nyert : Szabotőr csapat (%d pont)%n", sabPoints);
 			return 0;
 		}
 	}
@@ -497,7 +496,6 @@ public class Field
 				Saboteur s = new Saboteur(false, cistern, cistern);
 				s.SetId(i+1);
 				sab.addPlayer(s);
-				System.out.println("jooo");
 			}
 			teams.add(sab);
 
@@ -506,7 +504,6 @@ public class Field
 				Mechanic m = new Mechanic(false, cistern, startMec);
 				m.SetId(i+1);
 				mec.addPlayer(m);
-				System.out.println("jooo");
 			}
 			teams.add(mec);
 			System.out.println("#Játék betöltése sikeresen megtörtént#");
