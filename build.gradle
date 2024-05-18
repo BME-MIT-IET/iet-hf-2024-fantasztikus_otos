@@ -1,0 +1,34 @@
+plugins {
+    id("java")
+    id("application")
+    id("org.sonarqube") version "4.4.1.3373"
+}
+
+group = "org.example"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    implementation 'com.github.oshi:oshi-core:6.6.0'
+
+}
+
+
+application {
+    mainClassName = "main.FoMenu"
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+sonar {
+  properties {
+    property("sonar.projectKey", "BME-MIT-IET_iet-hf-2024-fantasztikus_otos")
+    property("sonar.organization", "bme-mit-iet-org")
+    property("sonar.host.url", "https://sonarcloud.io")
+  }
+}

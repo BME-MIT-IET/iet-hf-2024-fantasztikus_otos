@@ -3,7 +3,7 @@ package main;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Scanner;
+
 
 import Osztalyok.*;
 
@@ -13,6 +13,8 @@ public class FoMenu {
 	private static int nturns = 10; //Körök száma
 
 	private static Field f = new Field();
+
+	private static SystemMonitor systemMonitor = new SystemMonitor(); // System monitor
 
 	/**
 	 *
@@ -138,7 +140,13 @@ public class FoMenu {
 	 * @throws IOException
 	 */
 	public static void StartGame() throws IOException {
+
+
+
+
 		f.LoadMap("bin/palya1.txt");
+
+
 
 	}
 
