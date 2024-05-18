@@ -1,4 +1,0 @@
-PipeMove 1
-CisternMove
-LiftUpPump 2
-PipeMove 1

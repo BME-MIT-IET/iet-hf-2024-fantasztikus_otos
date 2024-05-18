@@ -1,4 +1,0 @@
-Mechanic1 játékos rálépett a Pipe1-re
-A jatekos kilyukasztja a Pipe1 csovet
-Pipe1 cső megjavítva
-Pipe1 nem lyukasztható ki még 3 körig

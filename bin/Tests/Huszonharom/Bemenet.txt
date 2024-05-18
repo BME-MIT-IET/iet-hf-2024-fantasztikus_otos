@@ -1,2 +1,0 @@
-PipeMove 1
-PumpMove 2
