@@ -105,7 +105,9 @@ public class Cistern extends PipeLine {
 	 * @param newValue
 	 */
 	@Override
-	public void SetRuined(boolean newValue) {}
+	public void SetRuined(boolean newValue) {
+		throw new UnsupportedOperationException("Cistern cannot be ruined.");
+	}
 
 	/**
 	 *
@@ -113,11 +115,15 @@ public class Cistern extends PipeLine {
 	 * @param p
 	 */
 	@Override
-	public void AcceptWater(int water, Pump p) {}
+	public void AcceptWater(int water, Pump p) {
+		throw new UnsupportedOperationException("Cistern does not accept water directly from a pump.");
+	}
 
 
 	@Override
-	public void Repair() {}
+	public void Repair() {
+		throw new UnsupportedOperationException("Cistern does not require repairs.");
+	}
 
 	/**
 	 *
@@ -125,27 +131,35 @@ public class Cistern extends PipeLine {
 	 * @param attach
 	 */
 	@Override
-	public void ChangePump(PipeLine detach, PipeLine attach) {}
+	public void ChangePump(PipeLine detach, PipeLine attach) {
+		throw new UnsupportedOperationException("Cistern does not support changing pumps.");
+	}
 
 	/**
 	 *
 	 * @param pu
 	 */
 	@Override
-	public void AddPump(PipeLine pu) {}
+	public void AddPump(PipeLine pu) {
+		throw new UnsupportedOperationException("Cistern does not support adding pumps.");
+	}
 
 	/**
 	 *
 	 */
 	@Override
-	public void Ruin() {}
+	public void Ruin() {
+		throw new UnsupportedOperationException("Cistern cannot be ruined.");
+	}
 
 	/**
 	 *
 	 * @param pu
 	 */
 	@Override
-	public void RemovePump(PipeLine pu) {}
+	public void RemovePump(PipeLine pu) {
+		throw new UnsupportedOperationException("Cistern does not support removing pumps.");
+	}
 
 	/**
 	 *
@@ -153,14 +167,18 @@ public class Cistern extends PipeLine {
 	 * @param b
 	 */
 	@Override
-	public void SetAttached(PipeLine pu, boolean b) {}
+	public void SetAttached(PipeLine pu, boolean b) {
+		throw new UnsupportedOperationException("Cistern does not support setting attachment status.");
+	}
 
 	/**
 	 *
 	 * @param pl
 	 */
 	@Override
-	public void StepOn(Player pl) {}
+	public void StepOn(Player pl) {
+		throw new UnsupportedOperationException("Cistern does not handle player stepping on it.");
+	}
 
 	/**
 	 *
@@ -186,11 +204,13 @@ public class Cistern extends PipeLine {
 	 * @param i
 	 */
 	@Override
-	public void SetSticky(int i) {}
+	public void SetSticky(int i) {
+		throw new UnsupportedOperationException("Cistern does not support setting sticky status.");
+	}
 
 	@Override
 	public void SetSlippery(int i) {
-
+		throw new UnsupportedOperationException("Cistern does not support setting slippery status.");
 	}
 
 	/**
@@ -198,7 +218,9 @@ public class Cistern extends PipeLine {
 	 * @param pi
 	 */
 	@Override
-	public void SetPipeOut(Pipe pi) {}
+	public void SetPipeOut(Pipe pi) {
+		throw new UnsupportedOperationException("Cistern does not support setting output pipe.");
+	}
 
 	/**
 	 *
@@ -211,12 +233,12 @@ public class Cistern extends PipeLine {
 
 	@Override
 	public void AddPipe(Pipe newPipe) {
-
+		throw new UnsupportedOperationException("Cistern does not support adding pipes.");
 	}
 
 	@Override
 	public void RemovePipe(Pipe rem) {
-
+		throw new UnsupportedOperationException("Cistern does not support removing pipes.");
 	}
 
 }
