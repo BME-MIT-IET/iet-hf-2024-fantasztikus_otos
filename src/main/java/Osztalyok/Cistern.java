@@ -102,10 +102,10 @@ public class Cistern extends PipeLine {
 
 	/**
 	 *
-	 * @param newValue
+	 * @param newValue 
 	 */
 	@Override
-	public void SetRuined(boolean newValue) {}
+	public void SetRuined(boolean newValue) { /* This method does nothing, as the game logic doesn't let the Cistern have a ruined state. */ }
 
 	/**
 	 *
