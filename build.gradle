@@ -1,7 +1,7 @@
 plugins {
     id("java")
     id("application")
-      id "org.sonarqube" version "4.4.1.3373"
+    id("org.sonarqube") version "4.4.1.3373"
 }
 
 group = "org.example"
@@ -21,9 +21,9 @@ application {
 }
 sonar {
   properties {
-    property "sonar.projectKey", "BME-MIT-IET_iet-hf-2024-fantasztikus_otos"
-    property "sonar.organization", "bme-mit-iet-org"
-    property "sonar.host.url", "https://sonarcloud.io"
+    property("sonar.projectKey", "BME-MIT-IET_iet-hf-2024-fantasztikus_otos")
+    property("sonar.organization", "bme-mit-iet-org")
+    property("sonar.host.url", "https://sonarcloud.io")
   }
 }
 
