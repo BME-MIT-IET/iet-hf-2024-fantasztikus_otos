@@ -1,1 +1,0 @@
-A játékos nem léphet át, mert foglalt a 8-as Pipe
