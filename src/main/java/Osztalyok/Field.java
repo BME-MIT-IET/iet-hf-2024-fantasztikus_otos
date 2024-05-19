@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +25,7 @@ public class Field
 	private int sNum = 0;
 	private int currentRound = 0;
 	public Boolean loadSuccess = true; //Betöltéshez kell
-	private Random random = new Random();
+	private Random random = new SecureRandom();
 
 //Actions
 
