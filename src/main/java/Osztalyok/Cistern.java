@@ -113,11 +113,11 @@ public class Cistern extends PipeLine {
 	 * @param p
 	 */
 	@Override
-	public void AcceptWater(int water, Pump p) {}
+	public void AcceptWater(int water, Pump p) { /* Cistern does not accept water directly from a pump. */ }
 
 
 	@Override
-	public void Repair() {}
+	public void Repair() { /* Cistern does not require repairs. */ }
 
 	/**
 	 *
@@ -125,27 +125,27 @@ public class Cistern extends PipeLine {
 	 * @param attach
 	 */
 	@Override
-	public void ChangePump(PipeLine detach, PipeLine attach) {}
+	public void ChangePump(PipeLine detach, PipeLine attach) { /* Cistern does not support changing pumps. */ }
 
 	/**
 	 *
 	 * @param pu
 	 */
 	@Override
-	public void AddPump(PipeLine pu) {}
+	public void AddPump(PipeLine pu) { /* Cistern does not support adding pumps. */ }
 
 	/**
 	 *
 	 */
 	@Override
-	public void Ruin() {}
+	public void Ruin() { /* Cistern cannot be ruined. */ }
 
 	/**
 	 *
 	 * @param pu
 	 */
 	@Override
-	public void RemovePump(PipeLine pu) {}
+	public void RemovePump(PipeLine pu) { /* Cistern does not support removing pumps. */ }
 
 	/**
 	 *
@@ -153,14 +153,14 @@ public class Cistern extends PipeLine {
 	 * @param b
 	 */
 	@Override
-	public void SetAttached(PipeLine pu, boolean b) {}
+	public void SetAttached(PipeLine pu, boolean b) { /* Cistern does not support setting attachment status. */ }
 
 	/**
 	 *
 	 * @param pl
 	 */
 	@Override
-	public void StepOn(Player pl) {}
+	public void StepOn(Player pl) { /* Cistern does not handle player stepping on it. */ }
 
 	/**
 	 *
@@ -186,11 +186,11 @@ public class Cistern extends PipeLine {
 	 * @param i
 	 */
 	@Override
-	public void SetSticky(int i) {}
+	public void SetSticky(int i) { /* Cistern does not support setting sticky status. */}
 
 	@Override
 	public void SetSlippery(int i) {
-
+		/* Cistern does not support setting slippery status. */
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class Cistern extends PipeLine {
 	 * @param pi
 	 */
 	@Override
-	public void SetPipeOut(Pipe pi) {}
+	public void SetPipeOut(Pipe pi) { /* Cistern does not support setting output pipe. */}
 
 	/**
 	 *
@@ -211,12 +211,12 @@ public class Cistern extends PipeLine {
 
 	@Override
 	public void AddPipe(Pipe newPipe) {
-
+		/* Cistern does not support adding pipes. */
 	}
 
 	@Override
 	public void RemovePipe(Pipe rem) {
-
+		/* Cistern does not support removing pipes. */
 	}
 
 }
