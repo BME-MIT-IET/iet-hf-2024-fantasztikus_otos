@@ -14,11 +14,20 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+
+    // Cucumber Dependencies
+    testImplementation 'io.cucumber:cucumber-java:7.2.3'
+    testImplementation 'io.cucumber:cucumber-junit:7.2.3'
 }
 
 application {
     mainClassName = "main.FoMenu"
 }
+
+test {
+    useJUnit()
+}
+
 sonar {
   properties {
     property("sonar.projectKey", "BME-MIT-IET_iet-hf-2024-fantasztikus_otos")

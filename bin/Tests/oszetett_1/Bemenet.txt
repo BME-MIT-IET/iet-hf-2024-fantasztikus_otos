@@ -1,0 +1,8 @@
+Load  bin/Tests/oszetett_1/Map.txt
+Retool 3
+PipeMove 3
+Hole
+PumpMove 2
+PipeMove 3
+Repair
+
