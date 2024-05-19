@@ -142,8 +142,10 @@ public class Mechanic extends Player
 				 c.SetPumpSpawned(false);
 				this.item =p;
 				return true;
+			default:
+				System.out.println("Unknown command: " + command[0]);
+				return false;
 		}
-		return false;
 	}
 
 	/**
