@@ -469,47 +469,55 @@ public class Field
 	/**
 	 *
 	 */
-	public void CreatePlayers(){
-		if(loadSuccess)
-		{
-			//Kezdőpntok megállapítása
-			Pump startMec = null;                                    //Kezdő pozi
-			int numOfSource = 0;                                    //Megszámoljuk hány forrás van
-			for(Pump p : pumps) if(p.GetIsSource()) numOfSource++;    //Megszámoljuk a forrásokat
-
-			int sourceIndex = random.nextInt(0, numOfSource);    //Random érték 0 és forrásszám között
-
-			int index = 0;                                            //Hanyadik forrásnál járunk
-			for(Pump p : pumps)                                        //Minden pumpán végigmegyünk
-			{
-				if(p.GetIsSource())                                    //Ha forrás
-				{
-					if(index == sourceIndex)                        //Ha a random érték által megadott sorszámú
-					{
-						System.out.println("--------------------Start hely id: " + sourceIndex);
-						startMec = p;                                //Kezdőállapot beállítása
-						break;                                        //Csak opti miatt
-					}
-					index++;                                        //Hanyadik forrás ++
-				}
-			}
-			Team sab = new Team();
-			for(int i = 0; i < sNum; i++) {
-				Saboteur s = new Saboteur(false, cistern, cistern);
-				s.SetId(i+1);
-				sab.addPlayer(s);
-			}
-			teams.add(sab);
-
-			Team mec = new Team();
-			for(int i = 0; i < mNum; i++) {
-				Mechanic m = new Mechanic(false, cistern, startMec);
-				m.SetId(i+1);
-				mec.addPlayer(m);
-			}
-			teams.add(mec);
+	public void CreatePlayers() {
+		if (loadSuccess) {
+			Pump startMec = selectRandomSourcePump();
+			createTeamSab();
+			createTeamMec(startMec);
 			System.out.println("#Játék betöltése sikeresen megtörtént#");
 		}
+	}
+
+	private void createTeamMec(Pump startMec) {
+		Team mec = new Team();
+		for(int i = 0; i < mNum; i++) {
+			Mechanic m = new Mechanic(false, cistern, startMec);
+			m.SetId(i+1);
+			mec.addPlayer(m);
+		}
+		teams.add(mec);
+	}
+	private void createTeamSab() {
+		Team sab = new Team();
+		for(int i = 0; i < sNum; i++) {
+			Saboteur s = new Saboteur(false, cistern, cistern);
+			s.SetId(i+1);
+			sab.addPlayer(s);
+		}
+		teams.add(sab);
+	}
+
+	private Pump selectRandomSourcePump() {
+		Pump startMec = null;
+		int numOfSource = 0;                                    //Megszámoljuk hány forrás van
+		for (Pump p : pumps) if (p.GetIsSource()) numOfSource++;
+		int sourceIndex = random.nextInt(0, numOfSource);
+
+		int index = 0;                                            //Hanyadik forrásnál járunk
+		for(Pump p : pumps)                                        //Minden pumpán végigmegyünk
+		{
+			if(p.GetIsSource())                                    //Ha forrás
+			{
+				if(index == sourceIndex)                        //Ha a random érték által megadott sorszámú
+				{
+					System.out.println("--------------------Start hely id: " + sourceIndex);
+					startMec = p;                                //Kezdőállapot beállítása
+					break;                                        //Csak opti miatt
+				}
+				index++;                                        //Hanyadik forrás ++
+			}
+		}
+		return startMec;
 	}
 
 	/**
