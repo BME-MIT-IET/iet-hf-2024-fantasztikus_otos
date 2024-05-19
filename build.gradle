@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("application")
+    id("org.sonarqube") version "4.4.1.3373"
 }
 
 group = "org.example"
@@ -18,6 +19,13 @@ dependencies {
 
 application {
     mainClassName = "main.FoMenu"
+}
+sonar {
+  properties {
+    property("sonar.projectKey", "BME-MIT-IET_iet-hf-2024-fantasztikus_otos")
+    property("sonar.organization", "bme-mit-iet-org")
+    property("sonar.host.url", "https://sonarcloud.io")
+  }
 }
 
 tasks.test {

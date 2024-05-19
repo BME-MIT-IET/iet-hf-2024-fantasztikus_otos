@@ -26,7 +26,7 @@ public class GameUI implements ActionListener {
     private int activeTeam=0;
     private boolean detach = false;
 
-    private boolean joinpipe = false;
+    private boolean joinPipeMode = false;
     private boolean detorjoin = false;
 
     private boolean bretool = false;
@@ -219,13 +219,13 @@ public class GameUI implements ActionListener {
                     p.GetPU().SetPos(p.GetPipeline().GetPU().GetX(), p.GetPipeline().GetPU().GetY());
                 }
 
-                else if(!detach  && joinpipe){
+                else if(!detach  && joinPipeMode){
                     //p.JoinPipe();
                     p.GetItem().GetPU().SetPosAndHeight
                             (p.GetPipeline().GetPU().GetX(),p.GetPipeline().GetPU().GetY(),
                                     p.GetPipeline().GetPU().GetX(),f.GetPipes().get(i).GetPU().GetX(),
                                     p.GetPipeline().GetPU().GetY(),f.GetPipes().get(i).GetPU().GetY());
-                    joinpipe = false;
+                    joinPipeMode = false;
                     detorjoin = false;
                     p.SetpickedupPipe(false);
 
@@ -311,7 +311,7 @@ public class GameUI implements ActionListener {
                 detach = true;
             }
             else{
-                joinpipe = true;
+                joinPipeMode = true;
             }
 
 

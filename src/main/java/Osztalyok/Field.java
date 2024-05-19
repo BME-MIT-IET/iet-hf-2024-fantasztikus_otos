@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,6 +25,7 @@ public class Field
 	private int sNum = 0;
 	private int currentRound = 0;
 	public Boolean loadSuccess = true; //Betöltéshez kell
+	private Random random = new SecureRandom();
 
 
 	//System Monitor for CPU and Memory usage
@@ -46,7 +48,7 @@ public class Field
 	 */
 	public void WaterLost(int amount) {
 		sabPoints += amount;
-		System.out.println("A szabotőrök pontjai " + sabPoints + " ponttal növekedett.");
+		System.out.printf("A szabotőrök pontjai %d ponttal növekedett.%n", sabPoints);
 	}
 
 	/**
@@ -75,7 +77,7 @@ public class Field
 	 */
 	public void WaterArrived(int amount) {
 		mecPoints += amount;
-		System.out.println("A szerelők pontjai " + mecPoints + " ponttal növekedett.");
+		System.out.printf("A szerelők pontjai %d ponttal növekedett.%n", mecPoints);
 	}
 
 	/**
@@ -83,7 +85,6 @@ public class Field
 	 */
 	public void NextTurn() {
 		for(int i = 0; i < 5; i++) {
-			Random r = new Random();
 			BreakPump(true);
 			turns++;
 			//Ha elérünk egy bizonyos körszámot, játék vége
@@ -95,11 +96,10 @@ public class Field
 	 * @param randomIn
 	 */
 	public void BreakPump(boolean randomIn) {
-		Random r = new Random();
-		int selectedPump = r.nextInt(pumps.size());
+		int selectedPump = random.nextInt(pumps.size());
 		if(!pumps.get(selectedPump).ruined && !pumps.get(selectedPump).GetIsSource()){
 			pumps.get(selectedPump).Ruin(pumps.get(selectedPump));
-			System.out.println("Pump " + pumps.get(selectedPump).GetId() + " pumpa elromlott");
+			System.out.printf("Pump %d pumpa elromlott%n", pumps.get(selectedPump).GetId());
 			ImageIcon icon = new ImageIcon("bin/Skins/BrokenPump.png");
 			pumps.get(selectedPump).pu.GetButton().setIcon(icon);
 		}
@@ -117,11 +117,7 @@ public class Field
 			cistern.SetPumpSpawned(true);
 		}
 		Pipe pi = cistern.CreateNewPipe();
-		/*
-		Random random = new Random();
-		int randomNumber = random.nextInt(800);
-		pi.GetPU().SetPos(randomNumber,700);
-		 */
+
 		BreakPump(true);
 		teams.get(0).Turn(this, b, s);
 		teams.get(1).Turn(this, b, s);
@@ -168,17 +164,17 @@ public class Field
 	{
 		if(mecPoints > sabPoints)
 		{
-			System.out.println("Nyert : Mechanic csapat (" + mecPoints + " pont)");
+			System.out.printf("Nyert : Mechanic csapat (%d pont)%n", mecPoints);
 			return 1;
 		}
 		else if(mecPoints == sabPoints)
 		{
-			System.out.println("Döntetlen ("+ mecPoints+" pont)");
+			System.out.printf("Döntetlen (%d pont)%n", mecPoints);
 			return -1;
 		}
 		else
 		{
-			System.out.println("Nyert : Szabotőr csapat ("+ sabPoints+" pont)");
+			System.out.printf("Nyert : Szabotőr csapat (%d pont)%n", sabPoints);
 			return 0;
 		}
 	}
@@ -419,7 +415,6 @@ public class Field
 								for(Pipe pi : pipes) {
 
 									if(pi.GetId() == pipeId) {
-										//System.out.printf("\n"+pi.GetId() + pipeId);
 										for(Pump p : pumps) {
 											if(p.GetId() == pump1) {
 												pi.AddPump(p);
@@ -492,50 +487,55 @@ public class Field
 	/**
 	 *
 	 */
-	public void CreatePlayers(){
-		if(loadSuccess)
-		{
-			//Kezdőpntok megállapítása
-			Pump startMec = null;                                    //Kezdő pozi
-			int numOfSource = 0;                                    //Megszámoljuk hány forrás van
-			for(Pump p : pumps) if(p.GetIsSource()) numOfSource++;    //Megszámoljuk a forrásokat
-
-			Random rnd = new Random();
-			int sourceIndex = rnd.nextInt(0, numOfSource);    //Random érték 0 és forrásszám között
-
-			int index = 0;                                            //Hanyadik forrásnál járunk
-			for(Pump p : pumps)                                        //Minden pumpán végigmegyünk
-			{
-				if(p.GetIsSource())                                    //Ha forrás
-				{
-					if(index == sourceIndex)                        //Ha a random érték által megadott sorszámú
-					{
-						System.out.println("--------------------Start hely id: " + sourceIndex);
-						startMec = p;                                //Kezdőállapot beállítása
-						break;                                        //Csak opti miatt
-					}
-					index++;                                        //Hanyadik forrás ++
-				}
-			}
-			Team sab = new Team();
-			for(int i = 0; i < sNum; i++) {
-				Saboteur s = new Saboteur(false, cistern, cistern);
-				s.SetId(i+1);
-				sab.addPlayer(s);
-				System.out.println("jooo");
-			}
-			teams.add(sab);
-
-			Team mec = new Team();
-			for(int i = 0; i < mNum; i++) {
-				Mechanic m = new Mechanic(false, cistern, startMec);
-				m.SetId(i+1);
-				mec.addPlayer(m);
-				System.out.println("jooo");
-			}
-			teams.add(mec);
+	public void CreatePlayers() {
+		if (loadSuccess) {
+			Pump startMec = selectRandomSourcePump();
+			createTeamSab();
+			createTeamMec(startMec);
 			System.out.println("#Játék betöltése sikeresen megtörtént#");
 		}
+	}
+
+	private void createTeamMec(Pump startMec) {
+		Team mec = new Team();
+		for(int i = 0; i < mNum; i++) {
+			Mechanic m = new Mechanic(false, cistern, startMec);
+			m.SetId(i+1);
+			mec.addPlayer(m);
+		}
+		teams.add(mec);
+	}
+	private void createTeamSab() {
+		Team sab = new Team();
+		for(int i = 0; i < sNum; i++) {
+			Saboteur s = new Saboteur(false, cistern, cistern);
+			s.SetId(i+1);
+			sab.addPlayer(s);
+		}
+		teams.add(sab);
+	}
+
+	private Pump selectRandomSourcePump() {
+		Pump startMec = null;
+		int numOfSource = 0;                                    //Megszámoljuk hány forrás van
+		for (Pump p : pumps) if (p.GetIsSource()) numOfSource++;
+		int sourceIndex = random.nextInt(0, numOfSource);
+
+		int index = 0;                                            //Hanyadik forrásnál járunk
+		for(Pump p : pumps)                                        //Minden pumpán végigmegyünk
+		{
+			if(p.GetIsSource())                                    //Ha forrás
+			{
+				if(index == sourceIndex)                        //Ha a random érték által megadott sorszámú
+				{
+					System.out.println("--------------------Start hely id: " + sourceIndex);
+					startMec = p;                                //Kezdőállapot beállítása
+					break;                                        //Csak opti miatt
+				}
+				index++;                                        //Hanyadik forrás ++
+			}
+		}
+		return startMec;
 	}
 
 	/**
