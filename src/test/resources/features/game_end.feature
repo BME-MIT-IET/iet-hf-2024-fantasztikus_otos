@@ -1,4 +1,7 @@
 Feature: Game End
+  As a player
+  I want the game to end after a certain number of turns
+  So that there is a clear conclusion to the gameplay
 
   Scenario: The game should end after a certain number of turns
     Given the map for game end is loaded from "bin/Tests/harmincharom/Map.txt"
