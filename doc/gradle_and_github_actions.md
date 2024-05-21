@@ -8,7 +8,7 @@ A projektfeladat egyik legelső lépéseként szerettük volna, ha a kódminős�
 
 ### Gradle build
 
-**TODO: gradle összeállítása**
+A projekt kezdetekor létrehoztam egy build.gradle fájlt egy már létező projektben. Ezt követően az IntelliJ automatikusan felismerte a Gradle projektet, és lehetővé tette a fájl kitöltését a szükséges adatokkal. Az elején némi nehézségbe ütköztem, mivel az első konfigurációm nem volt megfelelő, és nem találta a main osztályt. Végül a projekt struktúrájának átszervezésével és a build.gradle fájl módosításaival sikerült megoldani a problémát. A folyamat során megtanultam, hogyan kell helyesen konfigurálni a Gradle build fájlt, így a jövőben ez sokkal kevesebb időt fog igénybe venni.
 
 ### Github ellenőrzők
 
