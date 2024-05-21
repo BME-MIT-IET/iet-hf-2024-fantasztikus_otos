@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("application")
+    id("org.sonarqube") version "4.4.1.3373"
 }
 
 group = "org.example"
@@ -13,10 +14,27 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation 'com.github.oshi:oshi-core:6.6.0'
+
+    // Cucumber Dependencies
+    testImplementation 'io.cucumber:cucumber-java:7.2.3'
+    testImplementation 'io.cucumber:cucumber-junit:7.2.3'
 }
 
 application {
     mainClassName = "main.FoMenu"
+}
+
+test {
+    useJUnit()
+}
+
+sonar {
+  properties {
+    property("sonar.projectKey", "BME-MIT-IET_iet-hf-2024-fantasztikus_otos")
+    property("sonar.organization", "bme-mit-iet-org")
+    property("sonar.host.url", "https://sonarcloud.io")
+  }
 }
 
 tasks.test {

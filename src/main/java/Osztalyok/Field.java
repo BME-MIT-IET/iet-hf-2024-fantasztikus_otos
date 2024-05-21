@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,6 +25,11 @@ public class Field
 	private int sNum = 0;
 	private int currentRound = 0;
 	public Boolean loadSuccess = true; //Betöltéshez kell
+	private Random random = new SecureRandom();
+
+
+	//System Monitor for CPU and Memory usage
+	private static SystemMonitor systemMonitor = new SystemMonitor();
 
 //Actions
 
@@ -42,7 +48,7 @@ public class Field
 	 */
 	public void WaterLost(int amount) {
 		sabPoints += amount;
-		System.out.println("A szabotőrök pontjai " + sabPoints + " ponttal növekedett.");
+		System.out.printf("A szabotőrök pontjai %d ponttal növekedett.%n", sabPoints);
 	}
 
 	/**
@@ -71,7 +77,7 @@ public class Field
 	 */
 	public void WaterArrived(int amount) {
 		mecPoints += amount;
-		System.out.println("A szerelők pontjai " + mecPoints + " ponttal növekedett.");
+		System.out.printf("A szerelők pontjai %d ponttal növekedett.%n", mecPoints);
 	}
 
 	/**
@@ -79,7 +85,6 @@ public class Field
 	 */
 	public void NextTurn() {
 		for(int i = 0; i < 5; i++) {
-			Random r = new Random();
 			BreakPump(true);
 			turns++;
 			//Ha elérünk egy bizonyos körszámot, játék vége
@@ -91,11 +96,10 @@ public class Field
 	 * @param randomIn
 	 */
 	public void BreakPump(boolean randomIn) {
-		Random r = new Random();
-		int selectedPump = r.nextInt(pumps.size());
+		int selectedPump = random.nextInt(pumps.size());
 		if(!pumps.get(selectedPump).ruined && !pumps.get(selectedPump).GetIsSource()){
 			pumps.get(selectedPump).Ruin(pumps.get(selectedPump));
-			System.out.println("Pump " + pumps.get(selectedPump).GetId() + " pumpa elromlott");
+			System.out.printf("Pump %d pumpa elromlott%n", pumps.get(selectedPump).GetId());
 			ImageIcon icon = new ImageIcon("bin/Skins/BrokenPump.png");
 			pumps.get(selectedPump).pu.GetButton().setIcon(icon);
 		}
@@ -113,11 +117,7 @@ public class Field
 			cistern.SetPumpSpawned(true);
 		}
 		Pipe pi = cistern.CreateNewPipe();
-		/*
-		Random random = new Random();
-		int randomNumber = random.nextInt(800);
-		pi.GetPU().SetPos(randomNumber,700);
-		 */
+
 		BreakPump(true);
 		teams.get(0).Turn(this, b, s);
 		teams.get(1).Turn(this, b, s);
@@ -164,17 +164,17 @@ public class Field
 	{
 		if(mecPoints > sabPoints)
 		{
-			System.out.println("Nyert : Mechanic csapat (" + mecPoints + " pont)");
+			System.out.printf("Nyert : Mechanic csapat (%d pont)%n", mecPoints);
 			return 1;
 		}
 		else if(mecPoints == sabPoints)
 		{
-			System.out.println("Döntetlen ("+ mecPoints+" pont)");
+			System.out.printf("Döntetlen (%d pont)%n", mecPoints);
 			return -1;
 		}
 		else
 		{
-			System.out.println("Nyert : Szabotőr csapat ("+ sabPoints+" pont)");
+			System.out.printf("Nyert : Szabotőr csapat (%d pont)%n", sabPoints);
 			return 0;
 		}
 	}
@@ -299,166 +299,177 @@ public class Field
 	public void LoadMap(String inFile)    //Pálya betöltése txt fájlból
 	{
 		System.out.println("#Pálya betöltésének megkezdése#");
-		try (BufferedReader br = new BufferedReader(new FileReader(inFile))) {
-			System.out.println("-----File sikeresen megtalálva");
-			String line;
-			while ((line = br.readLine()) != null)                            //Ameddig nem üres a sor
-			{
-				//Játékosok betöltése
 
-				if (line.startsWith("*PLAYERS*")) {
-					System.out.println("----------Játékosok beállítása");
-					line = br.readLine();
-					String[] playerInfo = line.split(",");
-					this.mNum = Integer.parseInt(playerInfo[0]);
-					this.sNum= Integer.parseInt(playerInfo[1]);
-					this.mecPoints = Integer.parseInt(playerInfo[2]);
-					this.sabPoints = Integer.parseInt(playerInfo[3]);
-					this.currentRound = Integer.parseInt(playerInfo[4]);
-				}
-				//Pumpák létrehozása
-				else if (line.startsWith("*PUMP*")) {
-					System.out.println("----------Pumpák beállítása");
-					while (!(line = br.readLine()).isEmpty()) {                //Ameddig nem üres a sor
-						String[] pumpInfo = line.split(",");
+		//Start measurements
+		systemMonitor.startMeasurements();
+		for(int xy = 0; xy < 100; xy++){
 
-						//Értékek tárolása átmenetileg
-						int pumpId = Integer.parseInt(pumpInfo[0]);
-						int amount= Integer.parseInt(pumpInfo[1]);
-						boolean source = pumpInfo[2].equals("1");
-						boolean broken = pumpInfo[3].equals("1");
-						boolean inHand = pumpInfo[4].equals("1");
+			try (BufferedReader br = new BufferedReader(new FileReader(inFile))) {
+				System.out.println("-----File sikeresen megtalálva");
+				String line;
+				while ((line = br.readLine()) != null)                            //Ameddig nem üres a sor
+				{
+					//Játékosok betöltése
 
-						Pump pump = new Pump(pumpId,0,0,amount,cistern,this);
-						pump.inHand = inHand;
-						pump.ruined = broken;
-						pump.SetIsSource(source);
-						pumps.add(pump);
-
+					if (line.startsWith("*PLAYERS*")) {
+						System.out.println("----------Játékosok beállítása");
+						line = br.readLine();
+						String[] playerInfo = line.split(",");
+						this.mNum = Integer.parseInt(playerInfo[0]);
+						this.sNum= Integer.parseInt(playerInfo[1]);
+						this.mecPoints = Integer.parseInt(playerInfo[2]);
+						this.sabPoints = Integer.parseInt(playerInfo[3]);
+						this.currentRound = Integer.parseInt(playerInfo[4]);
 					}
-				}
-				//Csövek létrehozása
-				else if (line.startsWith("*PIPE*")) {
-					System.out.println("----------Csövek beállítása");
-					while (!(line = br.readLine()).isEmpty()) {                //Ameddig nem üres a sor
-						String[] pipeInfo = line.split(",");
+					//Pumpák létrehozása
+					else if (line.startsWith("*PUMP*")) {
+						System.out.println("----------Pumpák beállítása");
+						while (!(line = br.readLine()).isEmpty()) {                //Ameddig nem üres a sor
+							String[] pumpInfo = line.split(",");
 
-						//Értékek tárolása átmenetileg
-						int pipeId = Integer.parseInt(pipeInfo[0]);
-						int capacity= Integer.parseInt(pipeInfo[1]);
-						boolean isOnCistern = pipeInfo[2].equals("1");
-						boolean busy = pipeInfo[3].equals("1");
-						int hole = Integer.parseInt(pipeInfo[4]);
-						int sticky = Integer.parseInt(pipeInfo[5]);
-						int slippery = Integer.parseInt(pipeInfo[6]);
+							//Értékek tárolása átmenetileg
+							int pumpId = Integer.parseInt(pumpInfo[0]);
+							int amount= Integer.parseInt(pumpInfo[1]);
+							boolean source = pumpInfo[2].equals("1");
+							boolean broken = pumpInfo[3].equals("1");
+							boolean inHand = pumpInfo[4].equals("1");
 
-						Pipe pipe = new Pipe(pipeId, busy, capacity, cistern, this, sticky,slippery,hole);
-						pipe.SetIsOnCistern(isOnCistern);
-						if(isOnCistern)pipe.AddPump(cistern);
-						pipes.add(pipe);
+							Pump pump = new Pump(pumpId,0,0,amount,cistern,this);
+							pump.inHand = inHand;
+							pump.ruined = broken;
+							pump.SetIsSource(source);
+							pumps.add(pump);
+
+						}
 					}
-				}
-				//Pumpák beállítása
-				else if (line.startsWith("*SET PUMP*")) {
-					System.out.println("----------Pumpák bekötése csövekkel");
-					while (!(line = br.readLine()).isEmpty()) {                //Ameddig nem üres a sor
-						String[] pumpInfo = line.split(",");
+					//Csövek létrehozása
+					else if (line.startsWith("*PIPE*")) {
+						System.out.println("----------Csövek beállítása");
+						while (!(line = br.readLine()).isEmpty()) {                //Ameddig nem üres a sor
+							String[] pipeInfo = line.split(",");
 
-						//Értékek tárolása átmenetileg
-						int pumpId = Integer.parseInt(pumpInfo[0]);
-						int inId = Integer.parseInt(pumpInfo[1]);
-						int outId = Integer.parseInt(pumpInfo[2]);
+							//Értékek tárolása átmenetileg
+							int pipeId = Integer.parseInt(pipeInfo[0]);
+							int capacity= Integer.parseInt(pipeInfo[1]);
+							boolean isOnCistern = pipeInfo[2].equals("1");
+							boolean busy = pipeInfo[3].equals("1");
+							int hole = Integer.parseInt(pipeInfo[4]);
+							int sticky = Integer.parseInt(pipeInfo[5]);
+							int slippery = Integer.parseInt(pipeInfo[6]);
+
+							Pipe pipe = new Pipe(pipeId, busy, capacity, cistern, this, sticky,slippery,hole);
+							pipe.SetIsOnCistern(isOnCistern);
+							if(isOnCistern)pipe.AddPump(cistern);
+							pipes.add(pipe);
+						}
+					}
+					//Pumpák beállítása
+					else if (line.startsWith("*SET PUMP*")) {
+						System.out.println("----------Pumpák bekötése csövekkel");
+						while (!(line = br.readLine()).isEmpty()) {                //Ameddig nem üres a sor
+							String[] pumpInfo = line.split(",");
+
+							//Értékek tárolása átmenetileg
+							int pumpId = Integer.parseInt(pumpInfo[0]);
+							int inId = Integer.parseInt(pumpInfo[1]);
+							int outId = Integer.parseInt(pumpInfo[2]);
 
 
-						for (Pump p : pumps)//Kikeressük a pumpát id alapján
-						{
-							int index = 3;
-							for (int i = 0; i < pumpInfo.length - 3; i++)//Sok cső lehet, így az összesen végigmegyünk
+							for (Pump p : pumps)//Kikeressük a pumpát id alapján
 							{
-								int pipeId = Integer.parseInt(pumpInfo[index++]);//Kell az Id
-								for(Pipe pi : pipes) if(pi.GetId() == pipeId) p.AddPipe(pi);//Id alapján megkeressük
-							}
-							if (p.GetId() == pumpId)//Megtaláljuk
-							{
-								for (Pipe pi : pipes)//Hozzáadjuk a ki/be csöveket
+								int index = 3;
+								for (int i = 0; i < pumpInfo.length - 3; i++)//Sok cső lehet, így az összesen végigmegyünk
 								{
-									if (pi.GetId() == inId)  p.SetPipeIn(pi); //Itt a type honnan kell? Vagy konstans? -Do
-									if (pi.GetId() == outId) p.SetJoinPipeOut(pi); //Itt a type honnan kell? Vagy konstans? -Do
+									int pipeId = Integer.parseInt(pumpInfo[index++]);//Kell az Id
+									for(Pipe pi : pipes) if(pi.GetId() == pipeId) p.AddPipe(pi);//Id alapján megkeressük
 								}
+								if (p.GetId() == pumpId)//Megtaláljuk
+								{
+									for (Pipe pi : pipes)//Hozzáadjuk a ki/be csöveket
+									{
+										if (pi.GetId() == inId)  p.SetPipeIn(pi); //Itt a type honnan kell? Vagy konstans? -Do
+										if (pi.GetId() == outId) p.SetJoinPipeOut(pi); //Itt a type honnan kell? Vagy konstans? -Do
+									}
 
 
+								}
 							}
 						}
 					}
-				}
 
-				//Csövek beállítása
-				else if (line.startsWith("*SET PIPE*")) {
-					System.out.println("----------Csövek bekötése pumpákba");
-					while ((line = br.readLine()) != null && !line.isEmpty()) {
-						String[] pipeInfo = line.split(",");
+					//Csövek beállítása
+					else if (line.startsWith("*SET PIPE*")) {
+						System.out.println("----------Csövek bekötése pumpákba");
+						while ((line = br.readLine()) != null && !line.isEmpty()) {
+							String[] pipeInfo = line.split(",");
 
-						//Értékek tárolása átmenetileg
-						int pipeId = Integer.parseInt(pipeInfo[0]);
-						int pump1 = Integer.parseInt(pipeInfo[1]);
-						int pump2 = Integer.parseInt(pipeInfo[2]);
-						int attachedItem = Integer.parseInt(pipeInfo[3]);
-						boolean attachedBoolean = pipeInfo[4].equals("1");
-						if(pump1 != 0 || pump2 != 0)
-						{
-							//Kikeressük a csövekhez a pumpákat
-							for(Pipe pi : pipes) {
+							//Értékek tárolása átmenetileg
+							int pipeId = Integer.parseInt(pipeInfo[0]);
+							int pump1 = Integer.parseInt(pipeInfo[1]);
+							int pump2 = Integer.parseInt(pipeInfo[2]);
+							int attachedItem = Integer.parseInt(pipeInfo[3]);
+							boolean attachedBoolean = pipeInfo[4].equals("1");
+							if(pump1 != 0 || pump2 != 0)
+							{
+								//Kikeressük a csövekhez a pumpákat
+								for(Pipe pi : pipes) {
 
-								if(pi.GetId() == pipeId) {
-									//System.out.printf("\n"+pi.GetId() + pipeId);
-									for(Pump p : pumps) {
-										if(p.GetId() == pump1) {
-											pi.AddPump(p);
-											pi.SetAttached(p,true);
+									if(pi.GetId() == pipeId) {
+										for(Pump p : pumps) {
+											if(p.GetId() == pump1) {
+												pi.AddPump(p);
+												pi.SetAttached(p,true);
+											}
+
+											if(p.GetId() == pump2){
+												pi.AddPump(p);
+												pi.SetAttached(p,true);
+											}
+											//if(p.GetId() == attachedItem) pi.SetAttached(p, attachedBoolean);
 										}
-
-										if(p.GetId() == pump2){
-											pi.AddPump(p);
-											pi.SetAttached(p,true);
-										}
-										//if(p.GetId() == attachedItem) pi.SetAttached(p, attachedBoolean);
 									}
 								}
 							}
+							else
+							{
+								System.out.println("##A csövek nem maradhatnak bekötetlenül. A betöltés sikertelen!##");
+								loadSuccess = false;
+								return;
+							}
 						}
-						else
-						{
-							System.out.println("##A csövek nem maradhatnak bekötetlenül. A betöltés sikertelen!##");
-							loadSuccess = false;
-							return;
+					}
+
+					//Csövek beállítása
+					else if (line.startsWith("*CISTERN*")) {
+						System.out.println("----------Ciszternába menő csövek beállítása");
+						while ((line = br.readLine()) != null && !line.isEmpty()) {
+							String[] pipeInfo = line.split(",");
+
+							for(int i = 0; i < pipeInfo.length; i++) {
+								int currentId = Integer.parseInt(pipeInfo[i]);    //Értékek tárolása átmenetileg
+								for(Pipe pi : pipes)
+									if(pi.GetId() == currentId) {
+										pi.AddPump(this.cistern);
+										pi.SetAttached(this.cistern,true);//Cistern-be van kötve
+										this.cistern.AddPipeIn(pi);
+										pi.SetAttached(this.cistern, true);
+									}
+
+							}
 						}
 					}
 				}
-
-				//Csövek beállítása
-				else if (line.startsWith("*CISTERN*")) {
-					System.out.println("----------Ciszternába menő csövek beállítása");
-					while ((line = br.readLine()) != null && !line.isEmpty()) {
-						String[] pipeInfo = line.split(",");
-
-						for(int i = 0; i < pipeInfo.length; i++) {
-							int currentId = Integer.parseInt(pipeInfo[i]);    //Értékek tárolása átmenetileg
-							for(Pipe pi : pipes)
-								if(pi.GetId() == currentId) {
-									pi.AddPump(this.cistern);
-									pi.SetAttached(this.cistern,true);//Cistern-be van kötve
-									this.cistern.AddPipeIn(pi);
-									pi.SetAttached(this.cistern, true);
-								}
-
-						}
-					}
-				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("I/O Hiba az olvasás közben. Bemeneti fájl : " +  inFile);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("I/O Hiba az olvasás közben. Bemeneti fájl : " +  inFile);
 		}
+
+		//After the loop, get the measurements
+		double cpuLoadDifference = systemMonitor.calculateCpuLoadDifference();
+		long memoryUsageDifference = systemMonitor.calculateMemoryUsageDifference();
+		System.out.printf("CPU Load: %.2f%%\n", cpuLoadDifference);
+		System.out.printf("Memory Usage: %d MB\n", memoryUsageDifference);
 	}
 
 	/**
@@ -476,50 +487,55 @@ public class Field
 	/**
 	 *
 	 */
-	public void CreatePlayers(){
-		if(loadSuccess)
-		{
-			//Kezdőpntok megállapítása
-			Pump startMec = null;                                    //Kezdő pozi
-			int numOfSource = 0;                                    //Megszámoljuk hány forrás van
-			for(Pump p : pumps) if(p.GetIsSource()) numOfSource++;    //Megszámoljuk a forrásokat
-
-			Random rnd = new Random();
-			int sourceIndex = rnd.nextInt(0, numOfSource);    //Random érték 0 és forrásszám között
-
-			int index = 0;                                            //Hanyadik forrásnál járunk
-			for(Pump p : pumps)                                        //Minden pumpán végigmegyünk
-			{
-				if(p.GetIsSource())                                    //Ha forrás
-				{
-					if(index == sourceIndex)                        //Ha a random érték által megadott sorszámú
-					{
-						System.out.println("--------------------Start hely id: " + sourceIndex);
-						startMec = p;                                //Kezdőállapot beállítása
-						break;                                        //Csak opti miatt
-					}
-					index++;                                        //Hanyadik forrás ++
-				}
-			}
-			Team sab = new Team();
-			for(int i = 0; i < sNum; i++) {
-				Saboteur s = new Saboteur(false, cistern, cistern);
-				s.SetId(i+1);
-				sab.addPlayer(s);
-				System.out.println("jooo");
-			}
-			teams.add(sab);
-
-			Team mec = new Team();
-			for(int i = 0; i < mNum; i++) {
-				Mechanic m = new Mechanic(false, cistern, startMec);
-				m.SetId(i+1);
-				mec.addPlayer(m);
-				System.out.println("jooo");
-			}
-			teams.add(mec);
+	public void CreatePlayers() {
+		if (loadSuccess) {
+			Pump startMec = selectRandomSourcePump();
+			createTeamSab();
+			createTeamMec(startMec);
 			System.out.println("#Játék betöltése sikeresen megtörtént#");
 		}
+	}
+
+	private void createTeamMec(Pump startMec) {
+		Team mec = new Team();
+		for(int i = 0; i < mNum; i++) {
+			Mechanic m = new Mechanic(false, cistern, startMec);
+			m.SetId(i+1);
+			mec.addPlayer(m);
+		}
+		teams.add(mec);
+	}
+	private void createTeamSab() {
+		Team sab = new Team();
+		for(int i = 0; i < sNum; i++) {
+			Saboteur s = new Saboteur(false, cistern, cistern);
+			s.SetId(i+1);
+			sab.addPlayer(s);
+		}
+		teams.add(sab);
+	}
+
+	private Pump selectRandomSourcePump() {
+		Pump startMec = null;
+		int numOfSource = 0;                                    //Megszámoljuk hány forrás van
+		for (Pump p : pumps) if (p.GetIsSource()) numOfSource++;
+		int sourceIndex = random.nextInt(0, numOfSource);
+
+		int index = 0;                                            //Hanyadik forrásnál járunk
+		for(Pump p : pumps)                                        //Minden pumpán végigmegyünk
+		{
+			if(p.GetIsSource())                                    //Ha forrás
+			{
+				if(index == sourceIndex)                        //Ha a random érték által megadott sorszámú
+				{
+					System.out.println("--------------------Start hely id: " + sourceIndex);
+					startMec = p;                                //Kezdőállapot beállítása
+					break;                                        //Csak opti miatt
+				}
+				index++;                                        //Hanyadik forrás ++
+			}
+		}
+		return startMec;
 	}
 
 	/**

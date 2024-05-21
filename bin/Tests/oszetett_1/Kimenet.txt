@@ -1,0 +1,9 @@
+Sikeresen be lett töltve a bin/Tests/oszetett_1/Map.txt.
+A Pump2 kimeneti vége megváltozott.
+A játékos átlépett a Pump2-ről a Pipe3-ra.
+A Pipe3 kilyukadt.
+A víz elfolyt a sivatagba.
+A játékos átlépett a Pipe3-ról a Pump2-re
+A játékos átlépett a Pump2-ről a Pipe3-ra.
+A Pipe3 megjavul.
+A víz átfolyt a Pump3-ből a Pump4-be.

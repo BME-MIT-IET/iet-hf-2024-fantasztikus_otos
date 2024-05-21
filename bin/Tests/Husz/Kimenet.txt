@@ -1,0 +1,2 @@
+Pipe2 a ciszternába csatlakoztatott cső lett
+Hozzaadtuk a Pipe1 palyaelemet a jatekoshoz
