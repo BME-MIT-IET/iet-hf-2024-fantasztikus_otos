@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/iet-hf-2024-fantasztikus_otos.main.iml" filepath="$PROJECT_DIR$/.idea/modules/iet-hf-2024-fantasztikus_otos.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/iet-hf-2024-fantasztikus_otos.test.iml" filepath="$PROJECT_DIR$/.idea/modules/iet-hf-2024-fantasztikus_otos.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/iet-hf-2024-fantasztikus_otos.iml" filepath="$PROJECT_DIR$/.idea/iet-hf-2024-fantasztikus_otos.iml" />
     </modules>
   </component>
 </project>
