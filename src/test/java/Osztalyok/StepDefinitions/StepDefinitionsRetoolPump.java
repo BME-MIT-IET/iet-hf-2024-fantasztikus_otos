@@ -18,7 +18,7 @@ public class StepDefinitionsRetoolPump {
 
     @Given("the map for retool pump is loaded from {string}")
     public void loadMap(String mapPath) throws Exception {
-        f.LoadMap(mapPath);
+        f.LoadMap(mapPath, 1);
     }
 
     @Given("the game is started with {int} mechanic player and {int} saboteur players, for {int} turns")

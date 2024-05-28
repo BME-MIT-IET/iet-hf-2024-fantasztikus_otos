@@ -19,7 +19,7 @@ public class StepDefinitionsComplexTest1 {
     public void loadMapForComplexTest(String mapPath) {
         field = new Field();
         try {
-            field.LoadMap(mapPath);
+            field.LoadMap(mapPath, 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
