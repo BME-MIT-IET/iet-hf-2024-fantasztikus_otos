@@ -15,7 +15,7 @@ public class StepDefinitionsGameEnd {
 
     @Given("the map for game end is loaded from {string}")
     public void loadMap(String mapPath) throws Exception {
-        f.LoadMap(mapPath);
+        f.LoadMap(mapPath, 1);
     }
 
     @Given("the game is started with {int} mechanic player and {int} saboteur player for {int} turns")

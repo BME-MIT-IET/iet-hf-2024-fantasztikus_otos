@@ -18,7 +18,7 @@ public class StepDefinitionsHole {
     public void setUpGame() {
         field = new Field();
         try {
-            field.LoadMap("bin/palya1.txt");
+            field.LoadMap("bin/palya1.txt", 1);
             field.setStartGame(1, 0, 10); // Assuming 1 mechanic player, 0 saboteur players, and 10 turns
             field.CreatePlayers();
         } catch (Exception e) {

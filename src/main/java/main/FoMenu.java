@@ -137,7 +137,7 @@ public class FoMenu {
 	 * @throws IOException
 	 */
 	public static void StartGame() throws IOException {
-		f.LoadMap("bin/palya1.txt");
+		f.LoadMap("bin/palya1.txt", 100);
 
 	}
 

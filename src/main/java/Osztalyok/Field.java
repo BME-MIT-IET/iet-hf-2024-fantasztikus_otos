@@ -296,13 +296,17 @@ public class Field
 	 *
 	 * @param inFile
 	 */
-	public void LoadMap(String inFile)    //Pálya betöltése txt fájlból
+	public void LoadMap(String inFile, int callNumber)    //Pálya betöltése txt fájlból
 	{
 		System.out.println("#Pálya betöltésének megkezdése#");
 
-		//Start measurements
-		systemMonitor.startMeasurements();
-		for(int xy = 0; xy < 100; xy++){
+		//Start measurements - callNumber for Benchmark test
+
+		if(callNumber != 1){
+			systemMonitor.startMeasurements();
+		}
+
+		for(int xy = 0; xy < callNumber; xy++){
 
 			try (BufferedReader br = new BufferedReader(new FileReader(inFile))) {
 				System.out.println("-----File sikeresen megtalálva");
@@ -466,10 +470,13 @@ public class Field
 		}
 
 		//After the loop, get the measurements
-		double cpuLoadDifference = systemMonitor.calculateCpuLoadDifference();
-		long memoryUsageDifference = systemMonitor.calculateMemoryUsageDifference();
-		System.out.printf("CPU Load: %.2f%%\n", cpuLoadDifference);
-		System.out.printf("Memory Usage: %d MB\n", memoryUsageDifference);
+
+		if(callNumber != 1) {
+			double cpuLoadDifference = systemMonitor.calculateCpuLoadDifference();
+			long memoryUsageDifference = systemMonitor.calculateMemoryUsageDifference();
+			System.out.printf("CPU Load: %.2f%%\n", cpuLoadDifference);
+			System.out.printf("Memory Usage: %d MB\n", memoryUsageDifference);
+		}
 	}
 
 	/**

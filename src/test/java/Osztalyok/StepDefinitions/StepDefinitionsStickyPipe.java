@@ -14,7 +14,7 @@ public class StepDefinitionsStickyPipe {
 
     @Given("the map for making a sticky pipe is loaded from {string}")
     public void loadMapForStickyPipe(String mapPath) throws Exception {
-        f.LoadMap(mapPath);
+        f.LoadMap(mapPath, 1);
     }
 
     @Given("the players are created")

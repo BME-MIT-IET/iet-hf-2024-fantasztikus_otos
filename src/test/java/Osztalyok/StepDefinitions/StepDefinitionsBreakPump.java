@@ -17,7 +17,7 @@ public class StepDefinitionsBreakPump {
 
     @Given("the map for break pump is loaded from {string}")
     public void the_map_is_loaded_from(String mapPath) throws IOException {
-        f.LoadMap(mapPath);
+        f.LoadMap(mapPath, 1);
     }
 
     @Given("the game is set up with {int} mechanic and {int} saboteurs for {int} turns")
